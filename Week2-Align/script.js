@@ -3,6 +3,7 @@ let canvas;
 let ctx;
 let uploadButton;
 let fileInput;
+let readyToDraw = false;
 
 // sketchRNN classes setup
 let draw_class = null;
@@ -95,7 +96,8 @@ function initInterface(){
         img.onload = function() {
             const canvasRatio = canvas.width / canvas.height;
             const imgRatio = img.width / img.height;
-            
+            readyToDraw = false;
+
             let drawWidth, drawHeight, offsetX, offsetY;
 
             if (imgRatio > canvasRatio) {
@@ -114,6 +116,7 @@ function initInterface(){
 
             ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
             
+            
             // after drawing image, call VLM for getting class label (needs to be called in the image.onload)
             getClass().then(async () => {
                 // after getting the class, initialize the model
@@ -122,6 +125,25 @@ function initInterface(){
         };
         img.src = URL.createObjectURL(file);
     });
+
+    let description = document.createElement('div');
+    description.setAttribute('id','description');
+    description.style.position = "absolute";
+    description.style.top = (canvas.height) + "px";
+    description.style.width = "30%";
+    description.style.left = "5px";
+    description.style.textAlign = "left";
+    description.style.fontFamily = "Arial, sans-serif";
+    description.style.fontSize = "14px";
+    description.style.color = "#333";
+    description.innerHTML = "Upload an image to set the context. Then draw on the canvas and see how the AI continues your drawing based on the context of the image.";
+    if (readyToDraw){
+        
+        description.innerHTML += "<b>\n\nReady to draw!</b>";
+    }else{
+        description.innerHTML += "\n\n<b>Not ready to draw yet...</b>";
+    }
+    document.body.appendChild(description);
 }
 
 function init(){
@@ -196,11 +218,14 @@ function initSketchPad(){
         const dx = e.offsetX - lastX;
         const dy = e.offsetY - lastY;
         strokes.push([dx, dy, 1, 0, 0]); // pen_down
-
+        
+        
         ctx.beginPath();
         ctx.moveTo(lastX, lastY);
         ctx.lineTo(e.offsetX, e.offsetY);
         ctx.stroke();
+        
+        
 
         lastX = e.offsetX;
         lastY = e.offsetY;
@@ -231,20 +256,30 @@ function predictNextStroke(){
     const pdf = model.getPDF(rnn_state,0.1);
     const [dx, dy, ...newPen] = model.sample(pdf);
     console.log("Next stroke:", [dx, dy, ...newPen]);
-
-    ctx.beginPath();
-    ctx.moveTo(lastX, lastY);
-    ctx.lineTo(lastX+dx, lastY+dy);
-    ctx.stroke();
+    
+    // newPen = [pen_down, pen_up, pen_end]
+    const pen_down = newPen[0];
+    const pen_up = newPen[1];
+    const pen_end = newPen[2];
+    
+    // Only draw if pen_down = 1 (pen is touching the canvas)
+    if(pen_down === 1){
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(lastX+dx, lastY+dy);
+        ctx.stroke();
+    }
+    
+    // Update position regardless of pen state
     lastX += dx;
     lastY += dy;
 
     rnn_state = model.update([dx, dy, ...newPen], rnn_state);
-    if (newPen[2] !== 1) {
-      // not end of drawing, keep predicting
+    
+    // Continue predicting unless pen_end = 1 (drawing is finished)
+    if (pen_end !== 1) {
       requestAnimationFrame(predictNextStroke);
-    }
-
+    } 
 }
 
 async function initModel(class_name){
@@ -260,6 +295,10 @@ async function initModel(class_name){
     await model.initialize();
     rnn_state = model.zeroState(); // set state to zero state after model is loaded
     console.log("Model loaded and state initialized");
+    readyToDraw = true;
+    let description = document.getElementById('description');
+    description.innerHTML = description.innerHTML.replace("Not ready to draw yet...","Ready to draw!");
+    
     return model;
 }
 
