@@ -192,11 +192,39 @@ function renderText() {
 
         // Radar animation
         const radarRadius = Math.min(canvas.width, canvas.height) / 4;
-        const radarAngle = (Date.now() / 100) % (2 * Math.PI);
-        ctx.strokeStyle = '#000000ff';
-        ctx.lineWidth = 2;
+        
+
+
+        // radar animation comprise the following
+        // three stationary circles with different radius in the middle
+        // a rotating line segment (like a radar sweep)
+        // circle 1
+        ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.arc(canvas.width / 2, canvas.height / 2, radarRadius, radarAngle, radarAngle + Math.PI / 4);
+        ctx.arc(canvas.width / 2, canvas.height / 2, radarRadius  * 0.5, 0, 2 * Math.PI);
+        ctx.strokeStyle = '#000000ff';
+        ctx.stroke();
+
+        // circle2
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2, canvas.height / 2, radarRadius * 0.75, 0, 2 * Math.PI);
+        ctx.strokeStyle = '#000000ff';
+        ctx.stroke();
+
+        // circle3
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2, canvas.height / 2, radarRadius * 0.25, 0, 2 * Math.PI);
+        ctx.strokeStyle = '#000000ff';
+        ctx.stroke();
+
+        // rotating line segment
+        const radarAngle = (Date.now() / 100) % (2 * Math.PI);
+        const lineX = canvas.width / 2 + canvas.width/2 * Math.cos(radarAngle);
+        const lineY = canvas.height / 2 + canvas.width/2 * Math.sin(radarAngle);
+        ctx.beginPath();
+        ctx.moveTo(canvas.width / 2, canvas.height / 2);
+        ctx.lineTo(lineX, lineY);
+        ctx.strokeStyle = '#000000ff';
         ctx.stroke();
 
         requestAnimationFrame(renderText); // Ensure animation updates
