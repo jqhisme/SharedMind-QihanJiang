@@ -5,6 +5,8 @@
 ## Week2
 
 ## Week3
+Topology
+https://jqhisme.github.io/SharedMind-QihanJiang/Week3-ExplicitImplicit/
 
 ## Week4
 Space of Vocabulary
