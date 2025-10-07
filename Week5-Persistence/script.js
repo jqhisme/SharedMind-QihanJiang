@@ -287,7 +287,7 @@ function createCanvas() {
     input.style.top = `${canvas.height * 0.75}px`;
     input.style.width = '300px';
     input.style.backgroundColor = 'rgb(28, 28, 28)';
-    input.style.color = 'rgb(255, 255, 255)';
+    input.style.color = 'rgb(107, 117, 140)';
     input.style.border = '1px solid rgb(150, 150, 150)';
     input.style.padding = '5px';
     input.style.fontSize = '16px';
