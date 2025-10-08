@@ -11,7 +11,7 @@ let app;
 let db;
 
 // variables
-const question = "You are talking to a friend in a bar.\n You have finished 2 drinks \nand you talked for a long time about something you regret. \nYour friend suddenly gets emotional, \nsaying in a raised voice -\n'But you can't travel back in time!', \nand you say:";
+const question = "You are talking to a friend at a bar.\n You have finished 2 drinks \nand you talked for a long time about something you regret. \nYour friend suddenly gets emotional, \nsaying in a raised voice -\n'But you can't travel back in time!', \nand you say:";
 let top2 = null;
 let mean = null;
 let pcaSampleSize = 10;
@@ -352,6 +352,27 @@ function createCanvas() {
                 
             }
         }
+    });
+
+    // Ensure the question is redrawn at the very front
+    redrawQuestion();
+}
+
+function redrawQuestion() {
+    // Clear the area where the question is rendered
+    ctx.fillStyle = 'rgb(0, 45, 150)'; // Background color
+    ctx.fillRect(0, 0, canvas.width, canvas.height * 0.25);
+
+    // Render the question
+    ctx.font = '24px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgb(255, 255, 255)'; // Question color
+    const lines = question.split('\n');
+    const lineHeight = 30; // Adjust line height as needed
+    const startY = canvas.height * 0.25 - (lines.length * lineHeight) / 2;
+
+    lines.forEach((line, index) => {
+        ctx.fillText(line, canvas.width / 2, startY + index * lineHeight);
     });
 }
 
