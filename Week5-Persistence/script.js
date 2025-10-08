@@ -11,7 +11,7 @@ let app;
 let db;
 
 // variables
-const question = "You are talking to a friend at a bar.\n You have finished 2 drinks \nand you talked for a long time about something you regret. \nYour friend suddenly gets emotional, \nsaying in a raised voice -\n'But you can't travel back in time!', \nand you say:";
+const question = "You are talking to a friend at a bar.\n You finished 2 drinks \nand talked for a long time about something you regret. \nYour friend suddenly gets emotional, \nsaying in a raised voice -\n'But you can't travel back in time!', \nand you say:";
 let top2 = null;
 let mean = null;
 let pcaSampleSize = 10;
@@ -262,6 +262,9 @@ function createCanvas() {
     document.body.appendChild(canvas);
 
     ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+
 
     // Set background color
     ctx.fillStyle = 'rgb(0, 45, 150)';
@@ -388,7 +391,8 @@ function writeData(inputText,embedding){
 
 function drawText(text, x,y){
     ctx.font = '16px Arial';
-    ctx.fillText(text, x + 10, y - 10);
+    let degree = Math.random()*2*Math.PI;
+    ctx.fillText(text, x + 30*Math.cos(degree), y + 30*Math.sin(degree));
     ctx.beginPath();
     ctx.arc(x, y, 10, 0, 2 * Math.PI);
     ctx.fillStyle = 'rgb(212, 212, 212)';
