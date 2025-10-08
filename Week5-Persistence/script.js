@@ -11,7 +11,7 @@ let app;
 let db;
 
 // variables
-const question = "You are talking to a friend at a bar.\n You have finished 2 drinks \nand you talked for a long time about something you regret. \nYour friend suddenly gets emotional, \nsaying in a raised voice -\n'But you can't travel back in time!', \nand you say:";
+const question = "You are talking to a friend  a bar.\n You have finished 2 drinks \nand you talked for a long time about something you regret. \nYour friend suddenly gets emotional, \nsaying in a raised voice -\n'But you can't travel back in time!', \nand you say:";
 let top2 = null;
 let mean = null;
 let pcaSampleSize = 10;
@@ -309,12 +309,12 @@ function createCanvas() {
                 // Draw the point on the canvas
                 ctx.beginPath();
                 ctx.arc(x, y, 10, 0, 2 * Math.PI);
-                ctx.fillStyle = 'rgb(150, 150, 150)'; // Dot color
+                ctx.fillStyle = 'rgb(212, 212, 212)'; // Dot color
                 ctx.fill();
 
                 // Also draw the text next to the point
                 ctx.font = '16px Arial';
-                ctx.fillStyle = 'rgb(150, 150, 150)'; // Text color
+                ctx.fillStyle = 'rgb(212, 212, 212)'; // Text color
                 ctx.fillText(text, x + 10, y - 10);
                 input.value = '';
 
@@ -345,7 +345,7 @@ function createCanvas() {
                         ctx.beginPath();
                         ctx.moveTo(x, y);
                         ctx.lineTo(pos.x, pos.y);
-                        ctx.strokeStyle = 'rgb(150, 150, 150)'; // Line color
+                        ctx.strokeStyle = 'rgb(212, 212, 212)'; // Line color
                         ctx.stroke();
                     });
                 }
@@ -391,7 +391,7 @@ function drawText(text, x,y){
     ctx.fillText(text, x + 10, y - 10);
     ctx.beginPath();
     ctx.arc(x, y, 10, 0, 2 * Math.PI);
-    ctx.fillStyle = 'rgb(150, 150, 150)';
+    ctx.fillStyle = 'rgb(212, 212, 212)';
     ctx.fill();
 }
 
